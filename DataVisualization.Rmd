@@ -1,0 +1,173 @@
+---
+title: "Visualization"
+author: "Ducheng Tan"
+date: "2026-05-26"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(cache = TRUE) 
+```
+
+
+```{r}
+#install.packages("tidyverse")
+#install.packages("palmerpenguins")
+#install.packages("MASS")
+library(tidyverse)
+library(palmerpenguins)
+library(ggthemes)
+library(ggplot2)
+library(MASS)
+library(ggplot2)
+```
+
+
+```{r}
+palmerpenguins::penguins
+glimpse(penguins)
+```
+
+
+```{r}
+summary(penguins)
+```
+#ggplot 
+
+
+```{r}
+ggplot(
+  data = penguins,
+  mapping = aes(x = flipper_length_mm, y = body_mass_g, color = penguins$species)
+) + geom_point(mapping = aes(color = species)) +  geom_smooth(method = "lm")
+```
+ 
+```{r}
+ggplot(
+  data = penguins,
+  mapping = aes(x = flipper_length_mm, y = body_mass_g)
+) +
+  geom_point(mapping = aes(color = species, shape =species)) +
+  geom_smooth(method = "lm")
+```
+ 
+ 
+```{r}
+ggplot(
+  data = penguins,
+  mapping = aes(x = flipper_length_mm, y = body_mass_g)
+) +
+  geom_point(aes(color = species, shape = species)) +
+  geom_smooth(method = "lm") +
+  labs(
+    title = "Body mass and flipper length",
+    subtitle = "Dimensions for Adelie, Chinstrap, and Gentoo Penguins",
+    x = "Flipper length (mm)", y = "Body mass (g)",
+    color = "Species", shape = "Species"
+  ) +
+  scale_color_colorblind()
+```
+ 
+ 
+ 1.2.5 Exercise 
+ 
+How many rows are in penguins? How many columns?
+344 x 8 (n x p) 
+
+```{r}
+nrow(penguins); ncol(penguins)
+```
+
+
+What does the bill_depth_mm variable in the penguins data frame describe? Read the help for ?penguins to find out.
+
+a number denoting bill length (millimeters)  
+```{r}
+?penguins
+```
+
+
+Make a scatterplot of bill_depth_mm vs. bill_length_mm. That is, make a scatterplot with bill_depth_mm on the y-axis and bill_length_mm on the x-axis. Describe the relationship between these two variables.
+There is a weak positive relation between the two variables. 
+
+```{r}
+ggplot(data = penguins, mapping = aes(x=bill_length_mm, y=bill_depth_mm, color = species)) + geom_point()
+```
+
+
+What happens if you make a scatterplot of species vs. bill_depth_mm? What might be a better choice of geom?
+```{r}
+ggplot(data = penguins, mapping= (aes(x= species,y= bill_depth_mm, color = species ))) +geom_boxplot()
+```
+
+
+
+Why does the following give an error and how would you fix it?
+fixed via adding `mapping = aes(x, y)` 
+
+```{r}
+ggplot(data = penguins , mapping = aes(x= body_mass_g, y=flipper_length_mm, color =species)) +
+  geom_point()
+```
+
+
+
+What does the na.rm argument do in geom_point()? What is the default value of the argument? Create a scatterplot where you successfully use this argument set to TRUE.
+
+```{r}
+ggplot(data = penguins , mapping = aes(x= body_mass_g, y=flipper_length_mm, color =bill_depth_mm)) +
+  geom_point(na.rm = TRUE) # removes the missing data points without warning
+```
+
+
+Add the following caption to the plot you made in the previous exercise: “Data come from the palmerpenguins package.” Hint: Take a look at the documentation for labs().
+
+```{r}
+ggplot(data = penguins , mapping = aes(x= body_mass_g, y=flipper_length_mm, color =species)) +
+  geom_point(na.rm = TRUE) +  labs(title = "body mass vs flipper_length",caption = "Data come from the palmerpenguins package.")
+ # removes the missing data points without warning
+```
+
+Recreate the following visualization. What aesthetic should `bill_depth_mm` be mapped to? And should it be mapped at the global level or at the geom level?
+
+```{r}
+ggplot(data = penguins , mapping = aes(x=flipper_length_mm , y=body_mass_g, color =bill_depth_mm)) +
+  geom_point(na.rm = TRUE, size = 3) + geom_smooth(method = "loess")
+```
+
+
+Run this code in your head and predict what the output will look like. Then, run the code in R and check your predictions.
+```{r}
+ggplot(
+  data = penguins,
+  mapping = aes(x = flipper_length_mm, y = body_mass_g, color = island)
+) +
+  geom_point() +
+  geom_smooth(se = FALSE)
+```
+
+
+
+Will these two graphs look different? Why/why not? 
+
+```{r}
+ggplot(
+  data = penguins,
+  mapping = aes(x = flipper_length_mm, y = body_mass_g)
+) +
+  geom_point() +
+  geom_smooth()
+
+ggplot() +
+  geom_point(
+    data = penguins,
+    mapping = aes(x = flipper_length_mm, y = body_mass_g)
+  ) +
+  geom_smooth(
+    data = penguins,
+    mapping = aes(x = flipper_length_mm, y = body_mass_g)
+  )
+```
+ 
+ 
