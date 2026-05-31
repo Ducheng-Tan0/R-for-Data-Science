@@ -10,6 +10,7 @@ knitr::opts_chunk$set(echo = TRUE)
 knitr::opts_chunk$set(cache = TRUE) 
 ```
 
+## Packages and Library Loadings 
 
 ```{r}
 #install.packages("tidyverse")
@@ -23,6 +24,7 @@ library(MASS)
 library(ggplot2)
 ```
 
+## Data and Introduction 
 
 ```{r}
 palmerpenguins::penguins
@@ -170,4 +172,79 @@ ggplot() +
   )
 ```
  
+##ggplot2 calls 
+
+
+
+```{r}
  
+ggplot(
+  data = penguins,
+  mapping = aes(x = flipper_length_mm, y = body_mass_g)
+) +
+  geom_point()
+
+
+```
+
+The first two argument can be omitted after sometime and we can rewrite 
+
+```{r}
+ggplot(penguins, aes(x = flipper_length_mm, y = body_mass_g)) + 
+  geom_point()
+```
+
+
+The pipe 
+```{r}
+penguins |> 
+  ggplot(aes(x = flipper_length_mm, y = body_mass_g)) + 
+  geom_point()
+```
+
+## Visualizing Distributions 
+
+
+# Categorical Variable 
+
+```{r}
+ggplot(penguins, aes(x = species, fill = species)) +geom_bar()
+```
+
+To further reorder the bars based on their frequencies we can transform the variables in a factor 
+
+```{r}
+ggplot(penguins, aes(x = fct_infreq(species), fill = species))
+
++geom_bar()
+```
+
+
+# Numerical variable 
+
+Histograms for a continuous variable 
+```{r}
+ggplot(penguins, aes(x = body_mass_g)) +
+  geom_histogram(binwidth = 200)
+```
+A histogram divides the x-axis into equally spaced bins and then uses the height of a bar to display the number of observations that fall in each bin. In the graph above, the tallest bar shows that 39 observations have a `body_mass_g value` between 3,500 and 3,700 grams, which are the left and right edges of the bar.
+
+Too small or too big of the binwidth can hide the underlying distributions, use the correct binwidth to explain the data. 
+For example: 
+```{r}
+ggplot(penguins, aes(x = body_mass_g)) +
+  geom_histogram(binwidth = 20)
+ggplot(penguins, aes(x = body_mass_g)) +
+  geom_histogram(binwidth = 2000)
+```
+An alternative visualization for distributions of numerical variables is a density plot. A density plot is a smoothed-out version of a histogram and a practical alternative, particularly for continuous data that comes from an underlying smooth distribution. 
+
+```{r, geom_density(emprical)}
+
+
+
+ggplot(penguins, aes(x=body_mass_g)) + geom_density(linewidth =1, color = "dodgerblue")
+
+```
+
+
