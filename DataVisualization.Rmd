@@ -10,6 +10,7 @@ knitr::opts_chunk$set(echo = TRUE)
 knitr::opts_chunk$set(cache = TRUE) 
 ```
 
+## Packages and Library Loadings 
 
 ```{r}
 #install.packages("tidyverse")
@@ -23,6 +24,7 @@ library(MASS)
 library(ggplot2)
 ```
 
+## Data and Introduction 
 
 ```{r}
 palmerpenguins::penguins
@@ -170,4 +172,134 @@ ggplot() +
   )
 ```
  
+##ggplot2 calls 
+
+
+
+```{r}
  
+ggplot(
+  data = penguins,
+  mapping = aes(x = flipper_length_mm, y = body_mass_g)
+) +
+  geom_point()
+
+
+```
+
+The first two argument can be omitted after sometime and we can rewrite 
+
+```{r}
+ggplot(penguins, aes(x = flipper_length_mm, y = body_mass_g)) + 
+  geom_point()
+```
+
+
+The pipe 
+```{r}
+penguins |> 
+  ggplot(aes(x = flipper_length_mm, y = body_mass_g)) + 
+  geom_point()
+```
+
+## Visualizing Distributions 
+
+
+# Categorical Variable 
+
+```{r}
+ggplot(penguins, aes(x = species, fill = species)) +geom_bar()
+```
+
+To further reorder the bars based on their frequencies we can transform the variables in a factor 
+
+```{r}
+ggplot(penguins, aes(x = fct_infreq(species), fill = species))
+
++geom_bar()
+```
+
+
+# Numerical variable 
+
+Histograms for a continuous variable 
+```{r}
+ggplot(penguins, aes(x = body_mass_g)) +
+  geom_histogram(binwidth = 200)
+```
+A histogram divides the x-axis into equally spaced bins and then uses the height of a bar to display the number of observations that fall in each bin. In the graph above, the tallest bar shows that 39 observations have a `body_mass_g value` between 3,500 and 3,700 grams, which are the left and right edges of the bar.
+
+Too small or too big of the binwidth can hide the underlying distributions, use the correct binwidth to explain the data. 
+For example: 
+```{r}
+ggplot(penguins, aes(x = body_mass_g)) +
+  geom_histogram(binwidth = 20)
+ggplot(penguins, aes(x = body_mass_g)) +
+  geom_histogram(binwidth = 2000)
+```
+An alternative visualization for distributions of numerical variables is a density plot. A density plot is a smoothed-out version of a histogram and a practical alternative, particularly for continuous data that comes from an underlying smooth distribution. 
+
+```{r, geom_density(emprical)}
+
+
+
+ggplot(penguins, aes(x=body_mass_g)) + geom_density(linewidth =1, color = "dodgerblue")
+
+```
+#Exercise 
+
+Make a bar plot of species of penguins, where you assign species to the y aesthetic. How is this plot different?
+
+We can have a side way histogram where the x-axis become the frequency counts of the categorical variable. 
+
+```{r}
+ggplot(penguins, aes(y=species)) + geom_bar() 
+```
+How are the following two plots different? Which aesthetic, color or fill, is more useful for changing the color of bars?
+Using the `fill = "red"` allows the bars to be filled up with the color instead of just the border. 
+```{r}
+ggplot(penguins, aes(x = species)) +
+  geom_bar(color = "red")
+
+ggplot(penguins, aes(x = species)) +
+  geom_bar(fill = "red")
+```
+What does the bins argument in geom_histogram() do?
+
+```{r}
+?geom_histogram
+```
+From the `?` command we can see that bins is the argument for Number of bins. Overridden by binwidth. Defaults to 30.
+
+Make a histogram of the carat variable in the diamonds dataset that is available when you load the tidyverse package. Experiment with different binwidths. What binwidth reveals the most interesting patterns?
+
+
+
+```{r}
+library(tidyverse)
+#View(diamonds)
+library(patchwork)
+
+p1<-ggplot(diamonds, aes(x = carat)) +
+  geom_histogram(binwidth = 0.5)
+
+p2<-ggplot(diamonds, aes(x = carat)) +
+  geom_histogram(binwidth = 0.1)
+
+
+p3<-ggplot(diamonds, aes(x = carat)) +
+  geom_histogram(binwidth = 0.01)
+
+p4<-ggplot(diamonds, aes(x = carat)) +
+  geom_histogram(binwidth = 0.005)
+(p1+p2)/(p3+p4)
+```
+The graph p3 reveals the best insight as it tell us that the carat sizes are highly skewed with higher density on the integers values. 
+
+```{r}
+ggplot(diamonds, aes(x = carat)) + geom_density(color="dodgerblue", linewidth = 1)
+```
+## Visualizing Relationships 
+
+
+
