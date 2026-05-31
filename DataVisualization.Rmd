@@ -301,5 +301,14 @@ ggplot(diamonds, aes(x = carat)) + geom_density(color="dodgerblue", linewidth = 
 ```
 ## Visualizing Relationships 
 
+#A numerical and a categorical variable 
 
+
+```{r}
+ggplot(penguins, aes(x = species, y = body_mass_g)) +
+  geom_boxplot()
+ggplot(penguins, aes(x = body_mass_g, color = species)) +
+  geom_density(linewidth = 0.75)
+
+```
 
