@@ -246,6 +246,7 @@ An alternative visualization for distributions of numerical variables is a densi
 ggplot(penguins, aes(x=body_mass_g)) + geom_density(linewidth =1, color = "dodgerblue")
 
 ```
+<<<<<<< HEAD
 #Exercise 
 
 Make a bar plot of species of penguins, where you assign species to the y aesthetic. How is this plot different?
@@ -312,3 +313,7 @@ ggplot(penguins, aes(x = body_mass_g, color = species)) +
 
 ```
 
+=======
+
+
+>>>>>>> 67c1f2b93b408264c7f19c8c7a9b4676dfed12d5
