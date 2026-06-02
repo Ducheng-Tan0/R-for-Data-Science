@@ -313,7 +313,52 @@ ggplot(penguins, aes(x = body_mass_g, color = species)) +
 
 ```
 
-=======
+The `alpha` aesthetic add transparency to the filled density curves. 
 
 
->>>>>>> 67c1f2b93b408264c7f19c8c7a9b4676dfed12d5
+```{r}
+ggplot(penguins, aes(x = body_mass_g, color = species, fill = species)) +
+  geom_density(alpha = 0.3)
+```
+Two categorical variables we can use stacked bar plots. 
+
+```{r}
+p1<-ggplot(penguins, aes(x = species, fill = island)) +
+  geom_bar()
+p2<-ggplot(penguins, aes(x = island, fill = species)) +
+  geom_bar()
+
+p1+p2
+```
+This one shows proportion
+
+```{r}
+ggplot(penguins, aes(x = island, fill = species)) +
+  geom_bar(position = "fill")+ labs(y="proportion") #overwrite the y axis from count to proportions
+```
+
+
+Two numerical variables
+
+
+```{r}
+ggplot(penguins, aes(x = flipper_length_mm, y = body_mass_g)) +
+  geom_point()
+```
+
+For three or more variables we can plot them and let the color of points represent species and the shapes of points represent islands. 
+
+```{r}
+ggplot(penguins, aes(x = flipper_length_mm, y = body_mass_g)) +
+  geom_point(aes(color = species, shape = island),na.rm = TRUE)
+```
+This may be too cluttered so we can split the plot into facets, which is a subplot that each display one subset of the data
+
+```{r}
+ggplot(penguins, aes(x = flipper_length_mm, y = body_mass_g)) +
+  geom_point(aes(color = species, shape = species)) +
+  facet_wrap(~island) # The variable in facet_wrap should be categorical 
+
+ggsave(filename = "testing.png")
+```
+
